@@ -1,17 +1,250 @@
-#root {
-  max-width: 1280px;
+/* ==========================================
+   APP LAYOUT & STRUCTURE
+   ========================================== */
+
+.app-container {
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: left;
+  padding: var(--spacing-7) var(--spacing-6);
   width: 100%;
 }
 
-.container {
-  display: flex;
-  flex-direction: row; 
-  gap: 1%
+.app-header {
+  margin-bottom: var(--spacing-7);
 }
 
-.left {
-  width: 40%;
+.app-header h1 {
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ==========================================
+   TWO-PANE LAYOUT
+   ========================================== */
+
+.app-layout {
+  display: grid;
+  grid-template-columns: 45fr 55fr;
+  gap: var(--spacing-7);
+  align-items: start;
+}
+
+.form-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-6);
+}
+
+/* JSON panel is styled in components.css */
+
+/* ==========================================
+   VARIANT LIST SPECIFIC
+   ========================================== */
+
+.variant-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-3);
+  margin-bottom: var(--spacing-3);
+}
+
+.variant-item {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.variant-item .input {
+  flex: 1;
+  min-width: 0;
+}
+
+.variant-item .select {
+  flex: 1;
+  min-width: 0;
+}
+
+.variant-item .button-danger {
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   TARGETING SECTION
+   ========================================== */
+
+.targeting-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.targeting-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.rules-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+}
+
+.default-rule-section {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: var(--surface-tertiary);
+  border-radius: var(--radius-sm);
+  border: var(--border-width-thin) solid var(--border-default);
+}
+
+.default-rule-section label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  min-width: 60px;
+}
+
+.default-rule-section .select {
+  flex: 1;
+}
+
+/* Action buttons container */
+.action-buttons {
+  display: flex;
+  gap: var(--spacing-2);
+  margin-top: var(--spacing-2);
+  flex-wrap: wrap;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  .app-layout {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-6);
+  }
+
+  .app-container {
+    padding: var(--spacing-6) var(--spacing-5);
+  }
+
+  .json-panel {
+    position: static;
+    max-height: 600px;
+  }
+}
+
+/* Mobile (<768px) */
+@media (max-width: 768px) {
+  .app-layout {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+  }
+
+  .app-container {
+    padding: var(--spacing-4);
+  }
+
+  .app-header {
+    margin-bottom: var(--spacing-5);
+  }
+
+  .app-header h1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .json-panel {
+    position: static;
+    max-height: 500px;
+    order: 2;
+  }
+
+  .form-panel {
+    order: 1;
+  }
+
+  /* Stack variant items on very small screens */
+  .variant-item {
+    flex-wrap: wrap;
+  }
+
+  /* Adjust button sizes for touch targets */
+  .button {
+    min-height: 44px;
+    height: auto;
+    padding: var(--spacing-2) var(--spacing-4);
+  }
+
+  .checkbox {
+    min-width: 24px;
+    min-height: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .checkbox:checked::after {
+    top: 3px;
+    left: 7px;
+  }
+}
+
+/* Small mobile (<480px) */
+@media (max-width: 480px) {
+  .app-container {
+    padding: var(--spacing-3);
+  }
+
+  .form-section {
+    padding: var(--spacing-4);
+  }
+
+  .app-header h1 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .variant-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .variant-item .button-danger {
+    width: 100%;
+  }
+}
+
+/* ==========================================
+   PRINT STYLES
+   ========================================== */
+
+@media print {
+  .app-container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .app-layout {
+    display: block;
+  }
+
+  .form-panel {
+    page-break-after: always;
+  }
+
+  .json-panel {
+    position: static;
+    max-height: none;
+    box-shadow: none;
+  }
+
+  .button {
+    display: none;
+  }
 }

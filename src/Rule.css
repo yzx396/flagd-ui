@@ -1,0 +1,122 @@
+/* ==========================================
+   RULE COMPONENT STYLES
+   ========================================== */
+
+.rule-item {
+  padding: var(--spacing-4);
+  background: var(--surface-tertiary);
+  border: var(--border-width-thin) solid var(--border-default);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-3);
+  transition: all var(--transition-base);
+}
+
+.rule-item:hover {
+  box-shadow: var(--shadow-sm);
+}
+
+.rule-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Rule label (If/Else If) */
+.rule-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-3);
+  display: block;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* Condition section */
+.rule-condition {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: stretch;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-3);
+}
+
+.rule-condition .input {
+  flex: 1;
+  min-width: 120px;
+}
+
+.rule-condition .select {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Suboperator select (for semantic versioning) */
+.rule-condition .suboperator-select {
+  flex: 0 0 auto;
+  min-width: 80px;
+}
+
+/* Action section (Then) */
+.rule-action {
+  display: flex;
+  gap: var(--spacing-2);
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.rule-action-label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  min-width: 60px;
+}
+
+.rule-action .select {
+  flex: 1;
+  min-width: 120px;
+}
+
+.rule-action .button-danger {
+  flex-shrink: 0;
+}
+
+/* ==========================================
+   RESPONSIVE DESIGN
+   ========================================== */
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .rule-item {
+    padding: var(--spacing-3);
+  }
+
+  .rule-condition {
+    flex-direction: column;
+  }
+
+  .rule-condition .input,
+  .rule-condition .select {
+    flex: 1 1 auto;
+    min-width: 100%;
+  }
+
+  .rule-action {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .rule-action .select {
+    width: 100%;
+  }
+
+  .rule-action .button-danger {
+    width: 100%;
+  }
+}
+
+/* Small mobile adjustments */
+@media (max-width: 480px) {
+  .rule-label {
+    font-size: var(--font-size-xs);
+  }
+}

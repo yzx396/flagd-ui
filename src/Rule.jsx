@@ -1,9 +1,11 @@
+import './Rule.css'
+
 const Rule = ({ index, variants, rule, handleRuleChange, removeRule }) => {
 
     const label = index === 0 ? "If" : "Else If"
-  
+
     const semVerSubOperatorBlock = rule.condition.operator === "sem_ver" && (
-      <select id={`subOperator${index}`}
+      <select id={`subOperator${index}`} className="select suboperator-select"
         value={rule.condition.subOperator}
         onChange={(e) => handleRuleChange(index, "subOperator", e.target.value)}>
         <option value=">=">&gt;=</option>
@@ -17,18 +19,19 @@ const Rule = ({ index, variants, rule, handleRuleChange, removeRule }) => {
         <option value="<">&lt;</option>
       </select>
     )
-  
+
     const variantOptionsBlock = variants.filter(variant => variant.name).map((variant, index) => (
       <option key={`targetVariant-${index}`} value={variant.name}>{variant.name}</option>
     ))
-  
+
     return (
-      <div>
-        <label>{label}
-          <input id={`condition${index}Name`} placeholder="Name"
+      <div className="rule-item">
+        <span className="rule-label">{label}</span>
+        <div className="rule-condition">
+          <input id={`condition${index}Name`} className="input" placeholder="Name"
             value={rule.condition.name}
             onChange={(e) => handleRuleChange(index, "name", e.target.value)} />
-          <select id={`operator${index}`}
+          <select id={`operator${index}`} className="select"
             value={rule.condition.operator}
             onChange={(e) => handleRuleChange(index, "operator", e.target.value)}>
             {/* String */}
@@ -54,19 +57,19 @@ const Rule = ({ index, variants, rule, handleRuleChange, removeRule }) => {
             <option value="<=">Less than or equals</option>
           </select>
           {semVerSubOperatorBlock}
-          <input id={`condition${index}Value`} placeholder="Value"
+          <input id={`condition${index}Value`} className="input" placeholder="Value"
             value={rule.condition.value}
             onChange={(e) => handleRuleChange(index, "value", e.target.value)} />
-        </label>
-        <br />
-        <label>Then
-          <select id={`targetVariant${index}`}
+        </div>
+        <div className="rule-action">
+          <span className="rule-action-label">Then</span>
+          <select id={`targetVariant${index}`} className="select"
             value={rule.targetVariant}
             onChange={(e) => handleRuleChange(index, "", e.target.value)}>
             {variantOptionsBlock}
           </select>
-        </label>
-        <button id={`removeRule${index}`} onClick={() => removeRule(index)}>Remove</button>
+          <button id={`removeRule${index}`} className="button button-danger" onClick={() => removeRule(index)}>Remove</button>
+        </div>
       </div>
     )
   }

@@ -127,33 +127,33 @@ function App() {
   }
 
   const getBooleanVariantBlock = (variant, index) => ( type === "boolean" ?
-    <select id={`variant${index}Value`} value={variant.value.toString()}
+    <select id={`variant${index}Value`} className="select" value={variant.value.toString()}
       onChange={(e) => handleVariantChange(index, "value", e.target.value === "true")}>
       <option value="true">true</option>
       <option value="false">false</option>
     </select> : null )
 
   const getStringVariantBlock = (variant, index) => ( type === "string" ?
-    <input id={`variant${index}Value`} placeholder="Value" value={variant.value}
+    <input id={`variant${index}Value`} className="input" placeholder="Value" value={variant.value}
       onChange={(e) => handleVariantChange(index, "value", e.target.value)} /> : null )
 
   const getNumberVariantBlock = (variant, index) => ( type === "number" ?
-    <input id={`variant${index}Value`} type="number" value={variant.value}
+    <input id={`variant${index}Value`} className="input" type="number" value={variant.value}
       onChange={(e) => handleVariantChange(index, "value", Number(e.target.value))} /> : null )
 
   const getObjectVariantBlock = (variant, index) => ( type === "object" ?
-    <input id={`variant${index}Value`} value={variant.value}
+    <input id={`variant${index}Value`} className="input" value={variant.value}
       onChange={(e) => handleVariantChange(index, "value", e.target.value)} /> : null )
 
   const variantsBlock = variants.map((variant, index) => (
-    <div key={`variant${index}`}>
-      <input id={`variant${index}Name`} placeholder="Name" value={variant.name}
+    <div key={`variant${index}`} className="variant-item">
+      <input id={`variant${index}Name`} className="input" placeholder="Name" value={variant.name}
         onChange={(e) => handleVariantChange(index, "name", e.target.value)} />
       {getBooleanVariantBlock(variant, index)}
       {getStringVariantBlock(variant, index)}
       {getNumberVariantBlock(variant, index)}
       {getObjectVariantBlock(variant, index)}
-      <button id="removeVariant" onClick={() => removeVariant(index)}>Remove</button>
+      <button id="removeVariant" className="button button-danger" onClick={() => removeVariant(index)}>Remove</button>
     </div>
   ))
 
@@ -167,87 +167,110 @@ function App() {
   ))
 
   const defaultRuleBlock = hasTargeting && hasDefaultRule && (
-    <>
-    <label>Else
-      <select id="defaultRule"
+    <div className="default-rule-section">
+      <label>Else</label>
+      <select id="defaultRule" className="select"
         value={defaultRule}
         onChange={(e) => setDefaultRule(e.target.value)}>
         {variantOptionsBlock}
       </select>
-    </label>
-    <br/>
-    </>
+    </div>
   )
 
   const addRuleButton = hasTargeting && (
-    <button id="addRule" onClick={() => addRule()} >Add Rule</button>
+    <button id="addRule" className="button button-primary" onClick={() => addRule()}>Add Rule</button>
   )
 
   const defaultRuleCheckbox = hasTargeting && (
-    <>
-      <input id="defaultRule" type="checkbox" checked={hasDefaultRule} 
+    <label className="checkbox-wrapper">
+      <input id="defaultRule" className="checkbox" type="checkbox" checked={hasDefaultRule}
         onClick={(e) => setHasDefaultRule(e.target.checked)} />
-      <label htmlFor="defaultRule">Default Rule</label>
-    </>
+      <span>Default Rule</span>
+    </label>
   )
 
   return (
-    <>
-      <h1>flagd ui</h1>
-      <div className="container">
-        <div className="left">
-          <div>
-            <label htmlFor="flagKey">Flag Key</label>
-            <input id="flagKey" value={flagKey}
-              onChange={(e) => setFlagKey(e.target.value)} />
+    <div className="app-container">
+      <header className="app-header">
+        <h1>flagd ui</h1>
+      </header>
+      <div className="app-layout">
+        <div className="form-panel">
+          <div className="form-section">
+            <span className="section-header">Flag Configuration</span>
+            <div className="form-group">
+              <label htmlFor="flagKey" className="form-label">Flag Key</label>
+              <input id="flagKey" className="input" value={flagKey}
+                onChange={(e) => setFlagKey(e.target.value)} />
+            </div>
+            <div className="form-group">
+              <label className="checkbox-wrapper">
+                <input id="state" className="checkbox" type="checkbox" checked={state}
+                  onChange={(e) => setState(e.target.checked)} />
+                <span>Enabled</span>
+              </label>
+            </div>
+            <div className="form-group">
+              <label htmlFor="type" className="form-label">Type</label>
+              <select id="type" className="select" value={type}
+                onChange={(e) => handleTypeChange(e.target.value)}>
+                <option value="boolean">boolean</option>
+                <option value="string">string</option>
+                <option value="number">number</option>
+                <option value="object">object</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label htmlFor="state">State</label>
-            <input id="state" type="checkbox" checked={state}
-              onChange={(e) => setState(e.target.checked)} />
+          <div className="form-section">
+            <span className="section-header">Variants</span>
+            <div className="variant-list">
+              {variantsBlock}
+            </div>
+            <button id="addVariant" className="button button-secondary" onClick={addVariant}>Add Variant</button>
           </div>
-          <div>
-            <label htmlFor="type">Type</label>
-            <select id="type" value={type}
-              onChange={(e) => handleTypeChange(e.target.value)}>
-              <option value="boolean">boolean</option>
-              <option value="string">string</option>
-              <option value="number">number</option>
-              <option value="object">object</option>
-            </select>
+
+          <div className="form-section">
+            <span className="section-header">Default Variant</span>
+            <div className="form-group">
+              <select id="defaultVariant" className="select"
+                value={defaultVariant}
+                onChange={(e) => setDefaultVariant(e.target.value)}>
+                {variantOptionsBlock}
+              </select>
+            </div>
           </div>
-          <div>
-            <label>Variants
-              <div>
-                {variantsBlock}
-                <button id="addVariant" onClick={addVariant}>Add Variant</button>
-              </div>
-            </label>
-          </div>
-          <div>
-            <label htmlFor="defaultVariant">Default Variant</label>
-            <select id="defaultVariant"
-              value={defaultVariant}
-              onChange={(e) => setDefaultVariant(e.target.value)}>
-              {variantOptionsBlock}
-            </select>
-          </div>
-          <div>
-            <label htmlFor="hasTargeting">Targeting</label>
-            <input id="hasTargeting" type="checkbox" checked={hasTargeting}
-              onChange={(e) => setHasTargeting(e.target.checked)} />
-            <br />
-            {rulesBlock}
-            {defaultRuleBlock}
-            {addRuleButton}
-            {defaultRuleCheckbox}
+          <div className="form-section">
+            <span className="section-header">Targeting</span>
+            <div className="targeting-section">
+              <label className="checkbox-wrapper">
+                <input id="hasTargeting" className="checkbox" type="checkbox" checked={hasTargeting}
+                  onChange={(e) => setHasTargeting(e.target.checked)} />
+                <span>Enable Targeting</span>
+              </label>
+              {hasTargeting && (
+                <>
+                  <div className="rules-container">
+                    {rulesBlock}
+                  </div>
+                  {defaultRuleBlock}
+                  <div className="action-buttons">
+                    {addRuleButton}
+                    {defaultRuleCheckbox}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
-        <div>
-          <textarea id="json" readOnly value={generateJSON()} rows={30} cols={50} />
+
+        <div className="json-panel">
+          <div className="json-panel-header">
+            <span className="json-panel-title">Output</span>
+          </div>
+          <textarea id="json" className="json-textarea" readOnly value={generateJSON()} rows={30} />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
