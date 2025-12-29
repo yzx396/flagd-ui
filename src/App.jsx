@@ -1,6 +1,8 @@
 import { useState } from "react"
 import Rule from "./Rule"
 import convertToFlagdFormat from "./convertToFlagdFormat"
+import convertFromFlagdFormat from "./convertFromFlagdFormat"
+import validateFlagdSchema from "./validateFlagdSchema"
 import "./App.css"
 
 function App() {
@@ -20,6 +22,12 @@ function App() {
   }])
   const [hasDefaultRule, setHasDefaultRule] = useState(false)
   const [defaultRule, setDefaultRule] = useState("false")
+
+  // Import/Export state
+  const [showImportModal, setShowImportModal] = useState(false)
+  const [importText, setImportText] = useState("")
+  const [importError, setImportError] = useState("")
+  const [validationResult, setValidationResult] = useState(null)
 
   const handleTypeChange = (newType) => {
     setType(newType)
@@ -126,6 +134,59 @@ function App() {
     return JSON.stringify(convertedJson, null, 2)
   }
 
+  const handleImport = () => {
+    setImportError("")
+    try {
+      const parsed = JSON.parse(importText)
+      const result = convertFromFlagdFormat(parsed)
+
+      if (!result) {
+        setImportError("Invalid flagd format: Could not parse the definition")
+        return
+      }
+
+      // Apply imported values to state
+      setFlagKey(result.flagKey)
+      setState(result.state)
+      setType(result.type)
+      setVariants(result.variants)
+      setDefaultVariant(result.defaultVariant)
+      setHasTargeting(result.hasTargeting)
+      setRules(result.rules)
+      setHasDefaultRule(result.hasDefaultRule)
+      setDefaultRule(result.defaultRule)
+
+      // Close modal and clear import text
+      setShowImportModal(false)
+      setImportText("")
+    } catch (e) {
+      setImportError(`JSON parse error: ${e.message}`)
+    }
+  }
+
+  const handleValidate = () => {
+    try {
+      const json = JSON.parse(generateJSON())
+      const result = validateFlagdSchema(json)
+      setValidationResult(result)
+    } catch (e) {
+      setValidationResult({ valid: false, errors: [`JSON error: ${e.message}`] })
+    }
+  }
+
+  const handleExport = () => {
+    const json = generateJSON()
+    const blob = new Blob([json], { type: "application/json" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = `${flagKey || "flag"}.json`
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
   const getBooleanVariantBlock = (variant, index) => ( type === "boolean" ?
     <select id={`variant${index}Value`} className="select" value={variant.value.toString()}
       onChange={(e) => handleVariantChange(index, "value", e.target.value === "true")}>
@@ -189,10 +250,56 @@ function App() {
     </label>
   )
 
+  const importModal = showImportModal && (
+    <div className="modal-overlay" onClick={() => setShowImportModal(false)}>
+      <div className="modal" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-header">
+          <h2>Import flagd Definition</h2>
+          <button className="modal-close" onClick={() => setShowImportModal(false)}>&times;</button>
+        </div>
+        <div className="modal-body">
+          <p className="modal-description">Paste your flagd JSON definition below:</p>
+          <textarea
+            className="import-textarea"
+            value={importText}
+            onChange={(e) => setImportText(e.target.value)}
+            placeholder='{"my-flag": {"state": "ENABLED", "variants": {...}}}'
+            rows={12}
+          />
+          {importError && <div className="error-message">{importError}</div>}
+        </div>
+        <div className="modal-footer">
+          <button className="button button-secondary" onClick={() => setShowImportModal(false)}>Cancel</button>
+          <button className="button button-primary" onClick={handleImport}>Import</button>
+        </div>
+      </div>
+    </div>
+  )
+
+  const validationBlock = validationResult && (
+    <div className={`validation-result ${validationResult.valid ? 'validation-success' : 'validation-error'}`}>
+      <div className="validation-header">
+        {validationResult.valid ? 'Valid' : 'Invalid'}
+      </div>
+      {!validationResult.valid && validationResult.errors.length > 0 && (
+        <ul className="validation-errors">
+          {validationResult.errors.map((error, index) => (
+            <li key={index}>{error}</li>
+          ))}
+        </ul>
+      )}
+      <button className="validation-dismiss" onClick={() => setValidationResult(null)}>&times;</button>
+    </div>
+  )
+
   return (
     <div className="app-container">
+      {importModal}
       <header className="app-header">
         <h1>flagd ui</h1>
+        <div className="header-actions">
+          <button className="button button-secondary" onClick={() => setShowImportModal(true)}>Import</button>
+        </div>
       </header>
       <div className="app-layout">
         <div className="form-panel">
@@ -266,7 +373,12 @@ function App() {
         <div className="json-panel">
           <div className="json-panel-header">
             <span className="json-panel-title">Output</span>
+            <div className="json-panel-actions">
+              <button className="button button-secondary" onClick={handleValidate}>Validate</button>
+              <button className="button button-primary" onClick={handleExport}>Export</button>
+            </div>
           </div>
+          {validationBlock}
           <textarea id="json" className="json-textarea" readOnly value={generateJSON()} rows={30} />
         </div>
       </div>

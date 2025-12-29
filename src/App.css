@@ -11,11 +11,19 @@
 
 .app-header {
   margin-bottom: var(--spacing-7);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .app-header h1 {
   color: var(--text-primary);
   margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: var(--spacing-2);
 }
 
 /* ==========================================
@@ -247,4 +255,167 @@
   .button {
     display: none;
   }
+}
+
+/* ==========================================
+   MODAL STYLES
+   ========================================== */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: var(--surface-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-4) var(--spacing-5);
+  border-bottom: var(--border-width-thin) solid var(--border-default);
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: var(--font-size-2xl);
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: var(--spacing-5);
+}
+
+.modal-description {
+  margin: 0 0 var(--spacing-3) 0;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.import-textarea {
+  width: 100%;
+  min-height: 200px;
+  padding: var(--spacing-3);
+  border: var(--border-width-thin) solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  resize: vertical;
+  background: var(--surface-secondary);
+  color: var(--text-primary);
+}
+
+.import-textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-subtle);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) var(--spacing-5);
+  border-top: var(--border-width-thin) solid var(--border-default);
+}
+
+.error-message {
+  margin-top: var(--spacing-3);
+  padding: var(--spacing-3);
+  background: var(--status-error-subtle);
+  border: var(--border-width-thin) solid var(--status-error);
+  border-radius: var(--radius-md);
+  color: var(--status-error);
+  font-size: var(--font-size-sm);
+}
+
+/* ==========================================
+   VALIDATION STYLES
+   ========================================== */
+
+.json-panel-actions {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.validation-result {
+  position: relative;
+  padding: var(--spacing-3) var(--spacing-4);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-3);
+  font-size: var(--font-size-sm);
+}
+
+.validation-success {
+  background: var(--status-success-subtle);
+  border: var(--border-width-thin) solid var(--status-success);
+  color: var(--status-success);
+}
+
+.validation-error {
+  background: var(--status-error-subtle);
+  border: var(--border-width-thin) solid var(--status-error);
+  color: var(--status-error);
+}
+
+.validation-header {
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-1);
+}
+
+.validation-errors {
+  margin: var(--spacing-2) 0 0 0;
+  padding-left: var(--spacing-4);
+}
+
+.validation-errors li {
+  margin-bottom: var(--spacing-1);
+}
+
+.validation-dismiss {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-2);
+  background: none;
+  border: none;
+  font-size: var(--font-size-lg);
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 0;
+  line-height: 1;
+}
+
+.validation-dismiss:hover {
+  opacity: 1;
 }
